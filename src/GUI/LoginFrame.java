@@ -1,7 +1,10 @@
 package GUI;
 
+import java.awt.BorderLayout;
+import java.awt.Font;
 import java.awt.GridLayout;
 
+import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -21,18 +24,25 @@ public class LoginFrame extends JFrame {
 
     public LoginFrame() {
         setTitle("XXII Cinema Login");
-        setSize(480, 360);
+        setSize(480, 300);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setLayout(new GridLayout(4, 1));
+
+        JPanel titlePanel = new JPanel();
+        JLabel titleLabel = new JLabel("XXII");
+        titleLabel.setFont(new Font("Georgia", 1, 48));
+        titlePanel.add(titleLabel);
 
         JPanel usernamePanel = new JPanel();
         usernamePanel.add(new JLabel("Username :"));
         usernameField = new JTextField(20);
+        usernamePanel.setBorder(BorderFactory.createEmptyBorder(20, 0, 0, 0));
         usernamePanel.add(usernameField);
 
         JPanel passwordPanel = new JPanel();
         passwordPanel.add(new JLabel("Password :"));
         passwordField = new JPasswordField(20);
+        passwordPanel.setBorder(BorderFactory.createEmptyBorder(0, 0, 20, 0));
         passwordPanel.add(passwordField);
 
         JPanel buttonPanel = new JPanel();
@@ -40,9 +50,10 @@ public class LoginFrame extends JFrame {
         loginButton.addActionListener(e -> performLogin());
         buttonPanel.add(loginButton);
 
-        add(usernamePanel);
-        add(passwordPanel);
-        add(buttonPanel);
+        add(titlePanel, BorderLayout.NORTH);
+        add(usernamePanel, BorderLayout.CENTER);
+        add(passwordPanel, BorderLayout.CENTER);
+        add(buttonPanel, BorderLayout.SOUTH);
     }  
     
     private void performLogin() {
