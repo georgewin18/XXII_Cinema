@@ -4,17 +4,17 @@ public class Movie {
     private int id;
     private String title;
     private String genre;
-    private int availableSeats;
     private String studioName;
     private double basePrice;
+    private String showtime;
 
-    public Movie(int id, String title, String genre, int availableSeats, String studioName, double basePrice) {
+    public Movie(int id, String title, String genre, String studioName, double basePrice, String showtime) {
         this.id = id;
         this.title = title;
         this.genre = genre;
-        this.availableSeats = availableSeats;
         this.studioName = studioName;
         this.basePrice = basePrice;
+        this.showtime = showtime;
     }
 
     public int getId() {
@@ -29,10 +29,6 @@ public class Movie {
         return this.genre;
     }
 
-    public int getAvailableSeats() {
-        return this.availableSeats;
-    }
-
     public String getStudioName() {
         return this.studioName;
     }
@@ -41,7 +37,7 @@ public class Movie {
         return this.basePrice;
     }
 
-    public void setAvailableSeats(int availableSeats) {
-        this.availableSeats = availableSeats;
+    public String getShowtime() {
+        return this.showtime;
     }
 }
