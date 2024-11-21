@@ -13,12 +13,15 @@ import Database.DBConnection;
 import Models.Movie;
 
 public class MovieService {
+    private List<Movie> movies;
+    private String query;
+
     public List<Movie> getAllMovies() {
-        List<Movie> movies = new ArrayList<Movie>();
-        String query = "SELECT m.id, m.title, m.genre, s.name AS studio_name, s.base_price, m.showtime " +
-                       "FROM movies m " +
-                       "JOIN studios s " + 
-                       "ON m.studio_id = s.id";
+        movies = new ArrayList<Movie>();
+        query = "SELECT m.id, m.title, m.genre, s.name AS studio_name, s.base_price, m.showtime " +
+                "FROM movies m " +
+                "JOIN studios s " + 
+                "ON m.studio_id = s.id";
 
         try (Connection connect = DBConnection.getConnection();
              Statement statement = connect.createStatement();
@@ -41,12 +44,12 @@ public class MovieService {
     }
 
     public Movie getMovieById(int movieId) {
-        String query = "SELECT * FROM (" +
-                       "SELECT m.id, m.title, m.genre, s.name AS studio_name, s.base_price, m.showtime " +
-                       "FROM movies m " +
-                       "JOIN studios s " + 
-                       "ON m.studio_id = s.id) AS movie " +
-                       "WHERE movie.id = ?";
+        query = "SELECT * FROM (" +
+                "SELECT m.id, m.title, m.genre, s.name AS studio_name, s.base_price, m.showtime " +
+                "FROM movies m " +
+                "JOIN studios s " + 
+                "ON m.studio_id = s.id) AS movie " +
+                "WHERE movie.id = ?";
         try (Connection connect = DBConnection.getConnection();
              PreparedStatement statement = connect.prepareStatement(query)) {
             
@@ -70,8 +73,8 @@ public class MovieService {
     }
 
     public boolean addMovie(String title, String genre, int studioId, String showtime) {
-        String query = "INSERT INTO movies (title, genre, studio_id, showtime) " + 
-                       "VALUES (?, ?, ?, ?)";
+        query = "INSERT INTO movies (title, genre, studio_id, showtime) " + 
+                "VALUES (?, ?, ?, ?)";
         
         try (Connection connect = DBConnection.getConnection();
              PreparedStatement statement = connect.prepareStatement(query)) {
@@ -90,7 +93,7 @@ public class MovieService {
     }
 
     public boolean deleteMovie(int movieId) {
-        String query = "DELETE FROM movies WHERE id = ?";
+        query = "DELETE FROM movies WHERE id = ?";
 
         try (Connection connect = DBConnection.getConnection();
              PreparedStatement statement = connect.prepareStatement(query)) {
