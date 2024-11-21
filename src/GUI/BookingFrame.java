@@ -21,6 +21,12 @@ import Models.Movie;
 public class BookingFrame extends JFrame {
     private JTable movieTable;
     private JButton bookButton;
+    private JLabel headerLabel;
+    private MovieService movieService;
+    private List<Movie> movies;
+    private String[][] data;
+    private DefaultTableModel tableModel;
+    private JScrollPane scrollPane;
     
     public BookingFrame() {
         setTitle("XXII Cinema Ticket Reservation");
@@ -28,15 +34,15 @@ public class BookingFrame extends JFrame {
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setLayout(new BorderLayout());
 
-        JLabel headerLabel = new JLabel("NOW SHOWING", SwingConstants.CENTER);
+        headerLabel = new JLabel("NOW SHOWING", SwingConstants.CENTER);
         headerLabel.setFont(new Font("Georgia", Font.BOLD, 18));
         headerLabel.setBorder(BorderFactory.createEmptyBorder(10, 0, 10, 0));
         add(headerLabel, BorderLayout.NORTH);
 
         String[] columnNames = {"ID", "Title", "Genre", "Studio", "Price", "Showtime"};
-        MovieService movieService = new MovieService();
-        List<Movie> movies = movieService.getAllMovies();
-        String[][] data = new String[movies.size()][6];
+        movieService = new MovieService();
+        movies = movieService.getAllMovies();
+        data = new String[movies.size()][6];
 
         for (int i = 0; i < movies.size(); i++) {
             Movie movie = movies.get(i);
@@ -48,13 +54,13 @@ public class BookingFrame extends JFrame {
             data[i][5] = movie.getShowtime();
         }
 
-        DefaultTableModel tableModel = new DefaultTableModel(data, columnNames) {
+        tableModel = new DefaultTableModel(data, columnNames) {
             public boolean isCellEditable(int row, int colum) {
                 return false;
             }
         };
         movieTable = new JTable(tableModel);
-        JScrollPane scrollPane = new JScrollPane(movieTable);
+        scrollPane = new JScrollPane(movieTable);
 
         bookButton = new JButton("Book Ticket");
         bookButton.addActionListener(e -> {

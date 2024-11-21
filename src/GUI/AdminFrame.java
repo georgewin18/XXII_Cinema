@@ -13,21 +13,27 @@ import javax.swing.SwingConstants;
 import javax.swing.SwingUtilities;
 
 public class AdminFrame extends JFrame {
+    private JLabel label;
+    private JPanel buttonPanel;
+    private JButton addMovieButton;
+    private JButton viewMoviesButton;
+    private JButton logoutButton;
+
     public AdminFrame() {
         setTitle("Admin Dashboard");
         setSize(600, 400);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
-        JLabel label = new JLabel("Welcome to Admin Dashboard", SwingConstants.CENTER);
+        label = new JLabel("Welcome to Admin Dashboard", SwingConstants.CENTER);
         label.setBorder(BorderFactory.createEmptyBorder(10, 0, 10, 0));
         add(label, BorderLayout.NORTH);
 
-        JPanel buttonPanel = new JPanel();
+        buttonPanel = new JPanel();
         buttonPanel.setLayout(new GridLayout(3, 1, 10, 10));
 
-        JButton addMovieButton = new JButton("Add Movie");
-        JButton viewMoviesButton = new JButton("View Movies");
-        JButton logoutButton = new JButton("Logout");
+        addMovieButton = new JButton("Add Movie");
+        viewMoviesButton = new JButton("View Movies");
+        logoutButton = new JButton("Logout");
 
         buttonPanel.add(addMovieButton);
         buttonPanel.add(viewMoviesButton);
@@ -43,17 +49,19 @@ public class AdminFrame extends JFrame {
             SwingUtilities.invokeLater(() -> new ViewMoviesFrame().setVisible(true));
         });
 
-        logoutButton.addActionListener(e -> {
-            int confirm = JOptionPane.showConfirmDialog(
-                this, 
-                "Are you sure you want to logout?", 
-                "Logout Confirmation", 
-                JOptionPane.YES_NO_OPTION
-            );
-            if (confirm == JOptionPane.YES_OPTION) {
-                this.dispose();
-                SwingUtilities.invokeLater(() -> new LoginFrame().setVisible(true));
-            }
-        });
+        logoutButton.addActionListener(e -> confimLogOut());
+    }
+
+    private void confimLogOut() {
+        int confirm = JOptionPane.showConfirmDialog(
+            this, 
+            "Are you sure you want to logout?", 
+            "Logout Confirmation", 
+            JOptionPane.YES_NO_OPTION
+        );
+        if (confirm == JOptionPane.YES_OPTION) {
+            this.dispose();
+            SwingUtilities.invokeLater(() -> new LoginFrame().setVisible(true));
+        }
     }
 }

@@ -20,6 +20,10 @@ import Services.SeatService;
 
 public class SeatSelectionFrame extends JFrame {
     private int movieId;
+    private JPanel seatPanel;
+    private SeatService seatService;
+    private List<Seat> seats;
+    private JPanel screenPanel;
 
     public SeatSelectionFrame(int movieId) {
         this.movieId = movieId;
@@ -27,12 +31,12 @@ public class SeatSelectionFrame extends JFrame {
         setSize(800, 900);
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 
-        JPanel seatPanel = new JPanel();
+        seatPanel = new JPanel();
         seatPanel.setSize(800, 800);
         seatPanel.setLayout(new GridLayout(8, 8, 5, 5));
 
-        SeatService seatService = new SeatService();
-        List<Seat> seats = seatService.getSeats(this.movieId);
+        seatService = new SeatService();
+        seats = seatService.getSeats(this.movieId);
 
         for (Seat seat : seats) {
             JButton seatButton = new JButton(seat.getSeatNumber());
@@ -44,34 +48,11 @@ public class SeatSelectionFrame extends JFrame {
                 seatButton.setBackground(Color.GREEN);
             }
 
-            seatButton.addActionListener(e -> {
-                int confirm = JOptionPane.showConfirmDialog(
-                    this,
-                    "Reserve seat " + seat.getSeatNumber() + " ?",
-                    "Confirm seat", 
-                    JOptionPane.YES_NO_OPTION
-                );
-
-                if (confirm == JOptionPane.YES_OPTION) {
-                    if (seatService.bookSeat(seat.getId())) {
-                        JOptionPane.showMessageDialog(
-                            this, 
-                            "Seat Booked Successully"
-                        );
-                        seatButton.setEnabled(false);
-                        seatButton.setBackground(Color.RED);
-                        showTicket(this.movieId, seat.getSeatNumber());
-                    } else {
-                        JOptionPane.showMessageDialog(
-                            this, 
-                            "Failed to book seat");
-                    }
-                }
-            });
+            seatButton.addActionListener(e -> bookSeat(seat, seatButton));
             seatPanel.add(seatButton);
         }
 
-        JPanel screenPanel = new JPanel() {
+        screenPanel = new JPanel() {
             protected void paintComponent(Graphics g) {
                 super.paintComponents(g);
                 Graphics2D g2d = (Graphics2D) g;
@@ -90,6 +71,32 @@ public class SeatSelectionFrame extends JFrame {
     }
 
     private void showTicket(int movieId, String seatNumber) {
-        new TicketFrame(movieId, seatNumber).setVisible(true);
+        TicketFrame ticketFrame = new TicketFrame(movieId, seatNumber);
+        ticketFrame.setVisible(true);
+    }
+
+    private void bookSeat(Seat seat, JButton seatButton) {
+        int confirm = JOptionPane.showConfirmDialog(
+            this,
+            "Reserve seat " + seat.getSeatNumber() + " ?",
+            "Confirm seat", 
+            JOptionPane.YES_NO_OPTION
+        );
+
+        if (confirm == JOptionPane.YES_OPTION) {
+            if (seatService.bookSeat(seat.getId())) {
+                JOptionPane.showMessageDialog(
+                    this, 
+                    "Seat Booked Successully"
+                );
+                seatButton.setEnabled(false);
+                seatButton.setBackground(Color.RED);
+                showTicket(this.movieId, seat.getSeatNumber());
+            } else {
+                JOptionPane.showMessageDialog(
+                    this, 
+                    "Failed to book seat");
+            }
+        }
     }
 }
