@@ -12,9 +12,12 @@ import Database.DBConnection;
 import Models.Seat;
 
 public class SeatService {
+    private List<Seat> seats;
+    private String query;
+
     public List<Seat> getSeats(int movieId) {
-        List<Seat> seats = new ArrayList<Seat>();
-        String query = "SELECT * FROM seats WHERE movie_id = ?";
+        seats = new ArrayList<Seat>();
+        query = "SELECT * FROM seats WHERE movie_id = ?";
 
         try (Connection connect = DBConnection.getConnection();
              PreparedStatement statement = connect.prepareStatement(query)) {
@@ -37,7 +40,7 @@ public class SeatService {
     }
 
     public boolean bookSeat(int seatId) {
-        String query = "UPDATE seats SET is_booked = TRUE WHERE id = ?";
+        query = "UPDATE seats SET is_booked = TRUE WHERE id = ?";
         try (Connection connect = DBConnection.getConnection();
              PreparedStatement statement = connect.prepareStatement(query)) {
             
